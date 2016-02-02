@@ -1,0 +1,11 @@
+{
+	"name": "AidBuddy",
+	"version": "0.0.1",
+	"author": "Connie Yuan",
+	"description": "App for crowdsourcing disaster relief.",
+	"main": "app.js",
+	"dependencies": {
+		"express": "~3.3.5",
+		"ejs": "*"
+	}
+}

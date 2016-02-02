@@ -1,0 +1,82 @@
+/* Main style sheet for the application */
+
+#map, #introNote, #geoForm, #headerInfo, #mapInfo {
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+input.form-control {
+	width: 400px;
+	padding: 6px;
+	border-radius: 3px;
+	moz-border-radius: 3px;
+	webkit-border-radius: 3px;
+}
+
+textarea.form-control {
+	width: 400px;
+	padding: 6px;
+	border-radius: 3px;
+	moz-border-radius: 3px;
+	webkit-border-radius: 3px;
+}
+
+input.btn-block {
+	width: 150px !important;
+}
+
+#introNote {
+	font-size: 8pt;
+	font-style: italic;
+	width: 400px;
+	margin-top: 10px;
+}
+
+#mapInfo {
+	font-size: 8pt;
+	font-style: italic;
+	width: 1000px;
+}
+
+#geoForm {
+	width: 400px;
+}
+
+#headerInfo {
+	text-align: center;
+}
+
+#navbar {
+	height: 20px;
+	float: right;
+	margin-right: 10px;
+}
+
+.popupLogin {
+	padding: 10px 10px 10px;
+	width: 250px;
+	background: #fff;
+	display: none;
+	z-index: 999;
+	position: absolute;
+	right: 10px;
+	border: 1px solid #C4C4C4;
+	box-shadow: 0px 0px 10px #C4C4C4;
+}
+
+.popupLogin input.form-control, #errMessage {
+	width: 200px;
+}
+
+.popupLogin, .popupLogin input.form-control, .popupLogin button, .popupLogin a {
+	font-size: 8pt;
+}
+
+.popupLogin a {
+	font-weight: bolder;
+}
+
+#replaceImg {
+	font-style: italic;
+	font-size: 10pt;
+}
