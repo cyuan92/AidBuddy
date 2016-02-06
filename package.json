@@ -11,5 +11,6 @@
 		"async": "*",
 		"crypto": "*",
 		"bcrypt-nodejs": "*"
-	}
+	},
+	"scripts": {"start": "node app.js"}
 }
