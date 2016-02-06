@@ -13,6 +13,8 @@ app.use(express.session({secret: '20160202'}));
 
 /* Define the application's routes */
 app.get('/', routes.get_main);
+app.post('/login', routes.post_login);
+app.post('/logout', routes.post_logout);
 
 /* Start the server */
 var port = 8080;

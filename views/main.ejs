@@ -1,5 +1,168 @@
 <html>
-	<body>
-		<h1>Hello World!</h1>
-	</body>
+	<head> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Home</title>
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="/js/bootstrap.js"></script>
+		<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		
+		<script type="text/javascript">
+		var map;
+		var organization = '<%=organization%>';
+
+		/* Load the map at SF and display only the new markers if they exist */ 
+		var loadMap = function(newMarker) {
+			var myOptions = {
+				center: new google.maps.LatLng(37.7833, -122.4167),
+				zoom: 14,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+
+			map = new google.maps.Map(document.getElementById("map"), myOptions);
+		};
+
+		/* Function for user login */
+		var login = function() {
+			var password = document.getElementById("password").value;
+			var username = document.getElementById("username").value;
+			$.post("/login",
+			{
+				username: username,
+				password: password
+			},
+			function(data, err) {
+				if (data.err) {
+					$("#errMessage").html(data.err + "<br><br>");
+				}
+				if (data.organization) {
+					/* if login successfully, display welcome message and logout button */
+					$(".popupLogin").hide();
+					organization = data.organization;
+					$("#userOption").html("Welcome, " + organization + "!" + "<a class=\"logout\" href=\"#\"> Logout</a>");
+
+					reloadMapOnLoginChange();
+				}
+			});
+		};
+
+		/* Function called when user logs in. It closes all open markers and allow for the logout function. */
+		var reloadMapOnLoginChange = function() {
+			document.getElementById("username").value = "";
+			document.getElementById("password").value = "";
+			$("#errMessage").html("");
+
+			$(document).on("click", ".logout", function(e) {
+				e.preventDefault();
+				logout();
+			});
+		};
+
+		/* Function for user logout */
+		var logout = function() {
+			$.post("/logout", {},
+				function(data, err) {
+					if (data.data) {
+						organization = 'null';
+						/* display login button again */
+						$("#userOption").html("<a class=\"controlLogin\" href=\"#\">Login</a>");
+						reloadMapOnLogoutChange();
+					}
+				}
+			)
+		};
+
+		/* Function called when user logs out. All the open info windows are closed and the markers no longer display option to delete and edit. */
+		var reloadMapOnLogoutChange = function () {
+			
+			/* Add event listener for login link again */
+			$(".controlLogin").click(function(e) {
+				$("body").append('');
+				$(".popupLogin").show();
+				$(".close").click(function(e) {
+					$(".popupLogin").hide();
+				});
+			});
+		};
+
+		var errorFunction = function(position) {
+			alert('Error!');
+		}
+
+		/* Get user's current position */
+		var getLocation = function() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+			} else {
+				alert ('Could not load your current location.');
+			}
+		};
+
+		/* Functions called when window finishes loading */
+		window.onload = function() {
+			/* Add event listener for the login button */
+			$(".controlLogin").click(function(e) {
+				$("body").append('');
+				$(".popupLogin").show();
+				$(".close").click(function(e) {
+					$(".popupLogin").hide();
+				});
+			});
+
+			loadMap(null);
+
+			/* If logged in already then display welcome message and logout link */
+			if (organization) {
+				$("#userOption").html("Welcome, " + organization + "!" + 
+										+ "<a class=\"logout\" href=\"#\">Logout</a>");
+			} 
+
+		};
+
+	</script>
+
+    </head>
+    <body>
+    	<% /* Display the login link and box */ %>
+    	<div id="navbar">
+    		<div class="loginPopup">
+    			<div id="userOption"><a class="controlLogin" href="#">Login</a></div>
+
+    			<div class="popupLogin">
+    				<a href="#" class="close">X</a>
+    				<form action="" method="post" onSubmit="return false">
+    					<div class="form-group">
+							<label for="username">Username</label>
+							<input class="form-control" id="username" name="username" placeholder="Enter username">
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+						</div>
+
+						<div id="errMessage" style="color: red"></div>
+						<input type="submit" class="btn btn-lg btn-primary btn-block" value="Login" onClick="login()">
+    				</form>
+    			</div>
+    		</div>
+    	</div>
+    	<div class="container">
+    		<div id="headerInfo">
+	    		<h1> BAYMAX </h1>
+    	    </div>
+
+			<% /* Map Display */ %>
+			<div id="map" style="width: 940px; height: 500px;"></div>
+
+			<% /* Error Message Display */ %>
+			<% if (message != null) { %>
+				<font color = "red"><%= message %><p>
+				<font color = "black">
+			<% } %>
+
+		</div>
+    </body>
 </html>
